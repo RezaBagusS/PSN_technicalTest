@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+  
+  @theme {
+    --color-custLight: #D8D9D9;
+    --color-custDark: #212121;
+    --color-custPrimary: #5A03A0;
+    --color-custSecondary: #FAD50B;
+    --color-custThird: #FF0000;
+    --color-custFourth: #93CC50;
+    --color-custBackground: #FAEDED;
+    --color-custWhite: #FAFAFA;
+    --color-custBlack: #2B2B2B;
+    --color-custPurple: #012970;
+  }
+  
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+.cust-outer-container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1700px;
+}
+
+.cust-container {
+  width: 95%;
+  margin: 10px auto;
+}
+
+ul {
+  list-style-type: disc; 
+  padding-left: 20px; 
+}
+
+ol {
+  list-style-type: decimal; 
+  padding-left: 20px; 
+}
