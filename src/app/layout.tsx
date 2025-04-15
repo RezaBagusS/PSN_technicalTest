@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import 'primeicons/primeicons.css';
 import { ToastProvider } from "@/components/layout/ToastContext";
+import { UserProvider } from "@/components/layout/UserContext";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -24,11 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} cust-outer-container bg-[#FAFAFA] text-custBlack flex overflow-y-auto overflow-x-hidden`}
+        className={`${poppins.variable} cust-outer-container bg-[#FAFAFA] text-custBlack flex overflow-y-auto overflow-x-hidden drop-shadow-md`}
       >
-        <ToastProvider>
-          {children}
-        </ToastProvider>
+        <UserProvider>
+          <ToastProvider>
+            {children}
+          </ToastProvider>
+        </UserProvider>
       </body>
     </html>
   );

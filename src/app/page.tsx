@@ -1,6 +1,4 @@
 import FormLogin from "@/components/layout/FormLogin";
-import Image from "next/image";
-import Link from "next/link";
 
 async function Login() {
 

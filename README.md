@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# Comment Management System
 
-First, run the development server:
+This is a Next.js application for a comment management system with user authentication, a dashboard for viewing and managing comments, and a form for creating new comments. The system integrates with an external API for comment data and includes features like search, delete, and input validation.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Login Page**:
+  - Username and password fields with required validation.
+  - Displays "Field is required" for empty fields.
+  - Authenticates users and redirects to the dashboard upon successful login.
+- **Dashboard**:
+  - Displays a table of comments fetched from an external API.
+  - Includes a search bar to filter comments.
+  - Provides a delete button for each comment to remove it from the table.
+  - Features a "Create Comment" button that navigates to the comment creation form.
+- **Create Comment Page**:
+  - Form with fields for Name, Email, and Body.
+  - Validation for required fields and valid email format.
+  - Submits the new comment and redirects back to the dashboard table.
+- **Global Toast Notifications**:
+  - Displays success, error, or info messages for actions like login, comment creation, and deletion.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: Next.js 15.3.0 (App Router)
+- **Frontend**: React, TypeScript
+- **UI Components**: PrimeReact (Button, InputText, DataTable, Toast, etc.)
+- **Form Handling**: react-hook-form
+- **Styling**: Tailwind CSS (optional, or PrimeReact styles)
+- **API**: JSONPlaceholder (for comment data, https://jsonplaceholder.typicode.com/comments)
+- **State Management**: React Context (for global toast notifications)
 
-## Learn More
+## Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js (v18 or higher)
+- npm or yarn
+- A modern browser (Chrome, Firefox, etc.)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+MIT License. See `LICENSE` for details.
 
-## Deploy on Vercel
+## Contact
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For questions or feedback, reach out to [rezabagussaputrait@gmail.com] or open an issue on GitHub.

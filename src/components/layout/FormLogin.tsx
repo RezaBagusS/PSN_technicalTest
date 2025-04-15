@@ -4,8 +4,10 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import InputField from "../ui/InputFiled";
 import ErrorInput from "../ui/ErrorInput";
 import { Button } from 'primereact/button';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
+import { User, UserContext } from "./UserContext";
 
 const validLogin = {
     username: "frontendTest",
@@ -14,8 +16,10 @@ const validLogin = {
 
 const FormLogin = () => {
 
+    const { setUser } = useContext(UserContext);
     const [loading, setLoading] = useState(false);
     const { showToast } = useToast();
+    const location = useRouter();
 
     const {
         handleSubmit,
@@ -26,20 +30,20 @@ const FormLogin = () => {
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         setLoading(true);
         try {
-            console.log("Form data:", data);
+            // console.log("Form data:", data);
 
             if (data.username === validLogin.username && data.password === validLogin.password) {
                 showToast({
                     severity: 'success',
                     summary: 'Login Success',
-                    detail: 'Login Validation has been successful',
+                    detail: `Hi, ${data.username}`,
                 })
+                setUser(data as User);
             } else {
                 throw new Error("Invalid username or password");
             }
 
-            
-
+            location.push('/dashboard');
             await new Promise((resolve) => setTimeout(resolve, 2000));
         } catch (error: any) {
             console.error(error.message);
@@ -80,9 +84,9 @@ const FormLogin = () => {
                 <Button
                     label={loading || isSubmitting ? 'Loading ...' : 'Submit'}
                     type="submit"
-                    disabled={loading || isSubmitting}
                     aria-label="Submit"
                     size="small"
+                    disabled={loading || isSubmitting}
                     loading={loading}
                 />
             </div>

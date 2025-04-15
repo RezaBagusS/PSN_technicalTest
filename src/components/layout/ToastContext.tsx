@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useRef } from 'react';
+import React, { createContext, useRef } from 'react';
 import { Toast } from 'primereact/toast';
 
 type Severity = 'success' | 'info' | 'warn' | 'error' | 'secondary' | 'contrast';
