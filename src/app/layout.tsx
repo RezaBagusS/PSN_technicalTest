@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
-
+import { ToastProvider } from "@/components/layout/ToastContext";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -20,12 +20,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${poppins.variable} cust-outer-container bg-[#FAFAFA] text-custBlack flex overflow-y-auto overflow-x-hidden`}
       >
-        {children}
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

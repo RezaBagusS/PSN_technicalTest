@@ -4,11 +4,18 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import InputField from "../ui/InputFiled";
 import ErrorInput from "../ui/ErrorInput";
 import { Button } from 'primereact/button';
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useToast } from "@/hooks/useToast";
+
+const validLogin = {
+    username: "frontendTest",
+    password: "frontendTest123",
+}
 
 const FormLogin = () => {
 
     const [loading, setLoading] = useState(false);
+    const { showToast } = useToast();
 
     const {
         handleSubmit,
@@ -20,7 +27,28 @@ const FormLogin = () => {
         setLoading(true);
         try {
             console.log("Form data:", data);
+
+            if (data.username === validLogin.username && data.password === validLogin.password) {
+                showToast({
+                    severity: 'success',
+                    summary: 'Login Success',
+                    detail: 'Login Validation has been successful',
+                })
+            } else {
+                throw new Error("Invalid username or password");
+            }
+
+            
+
             await new Promise((resolve) => setTimeout(resolve, 2000));
+        } catch (error: any) {
+            console.error(error.message);
+            console.log("Invalid credentials");
+            showToast({
+                severity: 'error',
+                summary: 'Failed Login',
+                detail: error.message,
+            })
         } finally {
             setLoading(false);
         }
@@ -33,6 +61,7 @@ const FormLogin = () => {
         >
             <InputField
                 label="Username"
+                type="text"
                 register={register}
             />
             {errors.username && (
@@ -40,6 +69,7 @@ const FormLogin = () => {
             )}
             <InputField
                 label="Password"
+                type="password"
                 register={register}
             />
             {errors.password && (

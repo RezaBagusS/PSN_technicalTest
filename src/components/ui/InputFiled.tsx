@@ -5,10 +5,12 @@ function InputField({
     label,
     register,
     describe,
+    type,
 }: {
     label: string;
     register: UseFormRegister<FieldValues>;
     describe?: string;
+    type: string;
 }) {
 
     const usernameLowerCase = label.toLowerCase();
@@ -28,6 +30,7 @@ function InputField({
                 aria-describedby={`${usernameLowerCase}-help`}
                 className='p-inputtext-sm'
                 variant="filled"
+                type={type}
             />
             {
                 describe && (
