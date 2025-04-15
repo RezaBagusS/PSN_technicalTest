@@ -2,7 +2,7 @@ import { Avatar } from 'primereact/avatar';
 import { UserContext } from "@/contexts/UserContext";
 import { useContext } from "react";
 
-export const HeaderDashboard = () => {
+const HeaderDashboard = () => {
 
     const { getUser } = useContext(UserContext);
 
@@ -21,3 +21,4 @@ export const HeaderDashboard = () => {
     )
 }
 
+export default HeaderDashboard;

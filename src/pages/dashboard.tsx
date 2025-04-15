@@ -5,13 +5,27 @@ import { Suspense, useState } from 'react';
 
 export async function getServerSideProps() {
 
-    const res = await fetch(`https://jsonplaceholder.typicode.com/comments`)
-    const data: IComments[] = await res.json();
+    try {
+        const res = await fetch(`https://jsonplaceholder.typicode.com/comments`);
 
-    return {
-        props: {
-            status: true,
-            data: data
+        if (!res.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        const data: IComments[] = await res.json();
+
+        return {
+            props: {
+                status: true,
+                data: data
+            }
+        }
+    } catch (error) {
+        return {
+            props: {
+                status: false,
+                data: []
+            }
         }
     }
 }
@@ -21,23 +35,11 @@ export default function DashboardPage({ status, data }: {
     data: IComments[];
 }) {
 
-    const [dataComment, setDataComment] = useState<IComments[]>(data);
-
     return (
         <DashboardLayout>
             <div className='space-y-4'>
                 <h2 className="font-semibold text-custPurple text-2xl">Dashboard</h2>
-                <Suspense
-                    fallback={
-                        <div className="animate-pulse">
-                            <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                            <div className="h-4 bg-gray-200 rounded w-full"></div>
-                        </div>
-                    }
-                >
-                    <TableComments data={status ? dataComment : []} />
-                    {/* <TableComments data={[]} /> */}
-                </Suspense>
+                <TableComments data={status ? data : []} />
             </div>
         </DashboardLayout>
     );

@@ -17,7 +17,7 @@ const dataModule = [
     },
 ];
 
-export const SideBar = () => {
+const SideBar = () => {
 
     const [loading, setLoading] = useState(false);
     const { setUser } = useContext(UserContext);
@@ -61,4 +61,6 @@ export const SideBar = () => {
         </aside>
     )
 }
+
+export default SideBar;
 

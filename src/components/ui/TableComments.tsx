@@ -20,7 +20,7 @@ export default function TableComments({ data }: {
 
     const [dataComment, setDataComment] = useState<IComments[]>(data);
     const [loading, setLoading] = useState(false);
-    const [totalRecords, setTotalRecords] = useState(0);
+    const [totalRecords, setTotalRecords] = useState(data.length);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [lazyState, setLazyState] = useState({
         first: 0,
@@ -38,33 +38,40 @@ export default function TableComments({ data }: {
             setLoading(true);
 
             try {
-                const res = await fetch(
-                    `https://jsonplaceholder.typicode.com/comments`
-                );
-                if (!res.ok) {
-                    throw new Error('Failed to fetch comments');
-                }
-                let comments: IComments[] = await res.json();
+                
+                const start = lazyState.first;
+                const limit = lazyState.rows;
 
+                let comments: IComments[] = dataComment;
+                
                 const globalFilter = lazyState.filters.global.value?.trim();
                 if (globalFilter) {
                     const lowerFilter = globalFilter.toLowerCase();
-                    comments = comments.filter((comment) => {
+                    
+                    comments = data.filter((comment) => {
                         const matches =
-                            (comment.id?.toString().toLowerCase().includes(lowerFilter) ?? false) ||
-                            (comment.name?.toLowerCase().includes(lowerFilter) ?? false) ||
-                            (comment.email?.toLowerCase().includes(lowerFilter) ?? false) ||
-                            (comment.body?.toLowerCase().includes(lowerFilter) ?? false);
+                        (comment.id?.toString().toLowerCase().includes(lowerFilter) ?? false) ||
+                        (comment.name?.toLowerCase().includes(lowerFilter) ?? false) ||
+                            (comment.email?.toLowerCase().includes(lowerFilter) ?? false)
                         return matches;
                     });
-                }
-
-                if (totalRecords === 0) {
-                    const totalRes = await fetch('https://jsonplaceholder.typicode.com/comments');
-                    const totalData: IComments[] = await totalRes.json();
-                    if (isMounted) {
-                        setTotalRecords(totalData.length);
-                    }
+                    // console.log("Filter global result: ", comments);
+                    setTotalRecords(comments.length)
+                    
+                    const newPageData = comments.filter((item, idx) => {
+                        if (idx >= start && idx < start + limit) {
+                            return true;
+                        }
+                    })
+                    comments = newPageData;
+                } else {
+                    const newPageData = data.filter((item, idx) => {
+                        if (idx >= start && idx < start + limit) {
+                            return true;
+                        }
+                    })
+                    comments = newPageData;
+                    setTotalRecords(data.length)
                 }
 
                 if (isMounted) {
@@ -98,13 +105,6 @@ export default function TableComments({ data }: {
         });
     };
 
-    const onFilter = (event: any) => {
-        setLazyState({
-            ...lazyState,
-            filters: event.filters,
-        });
-    };
-
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setLazyState((prevState) => ({
@@ -112,7 +112,6 @@ export default function TableComments({ data }: {
             first: 0,
             page: 0,
             filters: {
-                ...prevState.filters,
                 global: { value, matchMode: FilterMatchMode.CONTAINS },
             },
         }));
@@ -121,7 +120,8 @@ export default function TableComments({ data }: {
 
     const renderHeader = () => {
         return (
-            <div className="flex justify-content-end">
+            <div className="flex justify-end items-center gap-3">
+                <p className='text-sm opacity-70'>Search Found: {globalFilterValue ? totalRecords : 0}</p>
                 <InputText
                     value={globalFilterValue}
                     onChange={onGlobalFilterChange}
@@ -132,20 +132,20 @@ export default function TableComments({ data }: {
         );
     };
 
-    const actionBodyTemplate = (data: any) => {
+    const actionBodyTemplate = (rowData :IComments) => {
 
         const toast = useRef<Toast | null>(null);
 
         const accept = useCallback(async () => {
             if (toast.current) {
                 try {
-                    const newDataComments = dataComment.filter((item) => item.id !== data.id);
+                    const newDataComments = dataComment.filter((item) => item.id !== rowData.id);
                     setDataComment(newDataComments);
-                    await fetch(`https://jsonplaceholder.typicode.com/posts/${data.id}`, { method: 'DELETE' });
+                    await fetch(`https://jsonplaceholder.typicode.com/posts/${rowData.id}`, { method: 'DELETE' });
                     toast.current.show({
                         severity: 'info',
                         summary: 'Confirmed',
-                        detail: `Comment with ID ${data.id} deleted`,
+                        detail: `Comment with ID ${rowData.id} deleted`,
                     });
                 } catch (error) {
                     toast.current.show({
@@ -155,7 +155,7 @@ export default function TableComments({ data }: {
                     });
                 }
             }
-        }, [data.id]);
+        }, [rowData.id]);
 
         const reject = () => {
             toast.current && toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
@@ -163,7 +163,7 @@ export default function TableComments({ data }: {
 
         const confirm = (id: number) => {
             confirmDialog({
-                message: `Do you want to delete comment with ID ${data.id}?`,
+                message: `Do you want to delete comment with ID ${rowData.id}?`,
                 header: 'Delete Confirmation',
                 icon: 'pi pi-info-circle',
                 defaultFocus: 'reject',
@@ -177,7 +177,7 @@ export default function TableComments({ data }: {
             <>
                 <Toast ref={toast} position="top-right" />
                 <Button type="button" onClick={() => {
-                    confirm(data.id);
+                    confirm(rowData.id);
                 }} severity="danger" icon="pi pi-trash" rounded></Button>
             </>
         );
@@ -198,7 +198,7 @@ export default function TableComments({ data }: {
                 totalRecords={totalRecords}
                 scrollable scrollHeight="400px"
                 onPage={onPage}
-                onFilter={onFilter}
+                // onFilter={onFilter}
                 header={renderHeader}
                 paginator
                 rowsPerPageOptions={[5, 10]}

@@ -1,4 +1,6 @@
-import FormLogin from "@/components/layout/FormLogin";
+import { lazy } from "react";
+
+const LazyFormLogin = lazy(() => import("@/components/layout/FormLogin"))
 
 const Login = () => {
 
@@ -14,7 +16,7 @@ const Login = () => {
                             Enter your username and password to login
                         </p>
                     </div>
-                    <FormLogin />
+                    <LazyFormLogin />
                 </div>
             </div>
         </div>
