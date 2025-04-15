@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 :root {
+  --font-poppins: "Poppins", sans-serif;
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  
+
   @theme {
-    --color-custLight: #D8D9D9;
+    --color-custLight: #d8d9d9;
     --color-custDark: #212121;
-    --color-custPrimary: #5A03A0;
-    --color-custSecondary: #FAD50B;
-    --color-custThird: #FF0000;
-    --color-custFourth: #93CC50;
-    --color-custBackground: #FAEDED;
-    --color-custWhite: #FAFAFA;
-    --color-custBlack: #2B2B2B;
+    --color-custPrimary: #5a03a0;
+    --color-custSecondary: #fad50b;
+    --color-custThird: #ff0000;
+    --color-custFourth: #93cc50;
+    --color-custBackground: #faeded;
+    --color-custWhite: #fafafa;
+    --color-custBlack: #2b2b2b;
     --color-custPurple: #012970;
   }
-  
 }
 
 * {
@@ -36,11 +36,11 @@
 }
 
 ul {
-  list-style-type: disc; 
-  padding-left: 20px; 
+  list-style-type: disc;
+  padding-left: 20px;
 }
 
 ol {
-  list-style-type: decimal; 
-  padding-left: 20px; 
+  list-style-type: decimal;
+  padding-left: 20px;
 }

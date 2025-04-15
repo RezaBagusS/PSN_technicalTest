@@ -1,5 +1,3 @@
-'use client'
-
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import InputField from "../ui/InputFiled";
 import ErrorInput from "../ui/ErrorInput";
@@ -7,7 +5,7 @@ import { Button } from 'primereact/button';
 import { useContext, useState } from "react";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
-import { User, UserContext } from "./UserContext";
+import { User, UserContext } from "../../contexts/UserContext";
 
 const validLogin = {
     username: "frontendTest",
@@ -30,7 +28,6 @@ const FormLogin = () => {
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         setLoading(true);
         try {
-            // console.log("Form data:", data);
 
             if (data.username === validLogin.username && data.password === validLogin.password) {
                 showToast({

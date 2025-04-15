@@ -1,5 +1,3 @@
-'use client';
-
 import React, { createContext, useRef } from 'react';
 import { Toast } from 'primereact/toast';
 
@@ -21,8 +19,8 @@ export const ToastContext = createContext<ToastContextType | undefined>(undefine
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const toast = useRef<Toast>(null);
 
-    const showToast = ({ severity, summary, detail, life = 3000 }: ToastMessage) => {
-        toast.current?.show({ severity, summary, detail, life });
+    const showToast = ({ severity, summary = 'info', detail = 'This default message', life = 3000 }: ToastMessage) => {
+        toast?.current?.show({ severity, summary, detail, life });
     };
 
     return (

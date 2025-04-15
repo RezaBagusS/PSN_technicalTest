@@ -1,10 +1,8 @@
-'use client';
-
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "primereact/button";
 import { ButtonModule } from "../ui/ButtonModule";
 import { useContext, useState } from "react";
-import { UserContext } from "./UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const dataModule = [
     {
@@ -36,7 +34,7 @@ export const SideBar = () => {
     }
 
     return (
-        <aside className="bg-custWhite py-5 ps-8 pe-5 shadow-lg flex flex-col justify-between h-full">
+        <aside className="bg-custWhite pt-20 pb-5 ps-8 pe-5 shadow-lg flex flex-col justify-between h-full">
             <div className="flex flex-col gap-3">
                 {dataModule.map((item, index) => {
                     return (
