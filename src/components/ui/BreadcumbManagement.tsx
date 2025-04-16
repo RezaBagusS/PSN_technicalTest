@@ -21,7 +21,7 @@ export default function BreadCrumbManagement() {
         const url = '/' + arrPath.slice(0, index + 1).join('/');
         return {
             label: formatLabel(segment),
-            template: () => index+1 === arrPath.length ? (
+            template: () => index + 1 === arrPath.length ? (
                 <p className="text-custDark font-semibold">
                     {formatLabel(segment)}
                 </p>
@@ -36,9 +36,9 @@ export default function BreadCrumbManagement() {
     const home = {
         icon: 'pi pi-home',
         template: () => (
-            <Link href="/">
+            <p className="text-custDark font-semibold">
                 <i className="pi pi-home" />
-            </Link>
+            </p>
         ),
     };
 

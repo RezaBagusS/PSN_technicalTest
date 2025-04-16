@@ -1,7 +1,8 @@
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import TableComments from '@/components/ui/TableComments';
 import { IComments } from '@/types/IComments';
-import { Suspense } from 'react';
+import { Messages } from 'primereact/messages';
+import { useEffect, useRef } from 'react';
 
 export async function getServerSideProps() {
 
@@ -24,6 +25,7 @@ export async function getServerSideProps() {
         return {
             props: {
                 status: false,
+                message: error,
                 data: []
             }
         }
@@ -35,12 +37,30 @@ export default function DashboardPage({ status, data }: {
     data: IComments[];
 }) {
 
+    const msgs = useRef<Messages | null>(null);
+
+    useEffect(() => {
+        if (data) {
+            msgs.current?.clear()
+            msgs.current?.show({
+                severity: 'info',
+                sticky: true,
+                summary: 'Info',
+                detail: 'Data comment fetched successfully',
+                closable: false
+            })
+        }
+
+        setTimeout(() => {
+            msgs.current?.clear()
+        }, 3000)
+    }, [data])
+
     return (
         <DashboardLayout>
+            <Messages ref={msgs} />
             <div className='space-y-4'>
-                <Suspense fallback={<div>Loading Comment Tabel</div>}>
-                    <TableComments data={status ? data : []} />
-                </Suspense>
+                <TableComments data={status ? data : []} msgs={msgs} />
             </div>
         </DashboardLayout>
     );

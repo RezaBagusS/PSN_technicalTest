@@ -1,6 +1,5 @@
 import { UserContext } from "@/contexts/UserContext";
 import { lazy, Suspense, useContext, useEffect } from "react";
-import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { usePathname } from "next/navigation";
@@ -10,7 +9,6 @@ const LazySideBar = lazy(() => import('@/components/layout/SideBar'));
 const LazyHeaderDashboard = lazy(() => import('@/components/layout/HeaderDashboard'));
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-    const { showToast } = useToast();
     const router = useRouter();
     const pathname = usePathname();
     const { getUser } = useContext(UserContext);
@@ -20,11 +18,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     useEffect(() => {
 
         if (!getUser()) {
-            showToast({
-                severity: 'error',
-                summary: 'Failed get data User',
-                detail: 'Redirect to login page',
-            });
             router.push('/');
         }
     }, [router, getUser]);

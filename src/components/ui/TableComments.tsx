@@ -1,16 +1,20 @@
-import { DataTable } from 'primereact/datatable';
+'use client'
+
+import { DataTable, DataTableStateEvent } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { IComments } from '@/types/IComments';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { RefObject, useCallback, useEffect, useState } from 'react';
 import { FilterMatchMode } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
 import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog';
 import { useRouter } from 'next/navigation';
+import { Messages } from 'primereact/messages';
+import { useLoadingDialog } from '@/contexts/LoadingContext';
 
-export default function TableComments({ data }: {
+export default function TableComments({ data, msgs }: {
     data: IComments[];
+    msgs: RefObject<Messages | null>
 }) {
     const columns = [
         { field: 'id', header: 'ID', width: '5%' },
@@ -20,6 +24,7 @@ export default function TableComments({ data }: {
     ];
 
     const [dataComment, setDataComment] = useState<IComments[]>(data);
+    const { showLoadingDialog, hideLoadingDialog } = useLoadingDialog();
     const [loading, setLoading] = useState(false);
     const [totalRecords, setTotalRecords] = useState(data.length);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
@@ -41,26 +46,26 @@ export default function TableComments({ data }: {
             setLoading(true);
 
             try {
-                
+
                 const start = lazyState.first;
                 const limit = lazyState.rows;
 
                 let comments: IComments[] = dataComment;
-                
+
                 const globalFilter = lazyState.filters.global.value?.trim();
                 if (globalFilter) {
                     const lowerFilter = globalFilter.toLowerCase();
-                    
+
                     comments = data.filter((comment) => {
                         const matches =
-                        (comment.id?.toString().toLowerCase().includes(lowerFilter) ?? false) ||
-                        (comment.name?.toLowerCase().includes(lowerFilter) ?? false) ||
+                            (comment.id?.toString().toLowerCase().includes(lowerFilter) ?? false) ||
+                            (comment.name?.toLowerCase().includes(lowerFilter) ?? false) ||
                             (comment.email?.toLowerCase().includes(lowerFilter) ?? false)
                         return matches;
                     });
                     // console.log("Filter global result: ", comments);
                     setTotalRecords(comments.length)
-                    
+
                     const newPageData = comments.filter((item, idx) => {
                         if (idx >= start && idx < start + limit) {
                             return true;
@@ -99,12 +104,13 @@ export default function TableComments({ data }: {
         };
     }, [lazyState.first, lazyState.rows, lazyState.filters.global.value, totalRecords]);
 
-    const onPage = (event: any) => {
+    const onPage = (event: DataTableStateEvent) => {
+
         setLazyState({
             ...lazyState,
             first: event.first,
             rows: event.rows,
-            page: event.page,
+            page: event.page ?? 0,
         });
     };
 
@@ -131,43 +137,51 @@ export default function TableComments({ data }: {
                     className="p-inputtext-sm"
                 />
                 <p className='text-sm opacity-70'>Search Found: {globalFilterValue ? totalRecords : 0}</p>
-                <Button label="Create Comment"  icon="pi pi-plus" severity="success" size='small' 
-                    onClick={() =>  location.push('/dashboard/create-comment')}
+                <Button label="Create Comment" icon="pi pi-plus" severity="success" size='small'
+                    onClick={() => location.push('/dashboard/create-comment')}
                 />
             </div>
         );
     };
 
-    const actionBodyTemplate = (rowData :IComments) => {
+    const actionBodyTemplate = useCallback((rowData: IComments) => {
 
-        const toast = useRef<Toast | null>(null);
+        const accept = async () => {
+            showLoadingDialog('Deleting Comment', 'Please wait while your action is being processed...');
+            msgs.current?.clear()
+            try {
+                const newDataComments = dataComment.filter((item) => item.id !== rowData.id);
+                setDataComment(newDataComments);
+                await fetch(`https://jsonplaceholder.typicode.com/posts/${rowData.id}`, { method: 'DELETE' });
 
-        const accept = useCallback(async () => {
-            if (toast.current) {
-                try {
-                    const newDataComments = dataComment.filter((item) => item.id !== rowData.id);
-                    setDataComment(newDataComments);
-                    await fetch(`https://jsonplaceholder.typicode.com/posts/${rowData.id}`, { method: 'DELETE' });
-                    toast.current.show({
-                        severity: 'info',
-                        summary: 'Confirmed',
-                        detail: `Comment with ID ${rowData.id} deleted`,
-                    });
-                } catch (error) {
-                    toast.current.show({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: 'Failed to delete comment',
-                    });
-                }
+                // throw new Error('Error deleting comment');
+
+                msgs.current?.show({
+                    severity: 'info',
+                    sticky: true,
+                    summary: 'Delete Success',
+                    detail: 'You have successfully deleted the comment',
+                    closable: false
+                })
+                
+            } catch (error: any) {
+                
+                msgs.current?.show({
+                    severity: 'error',
+                    sticky: true,
+                    summary: 'Delete Failed',
+                    detail: error.message,
+                    closable: false
+                })
+            } finally {
+                setTimeout(() => {
+                    msgs.current?.clear();
+                    hideLoadingDialog();
+                }, 3000)
             }
-        }, [rowData.id]);
-
-        const reject = () => {
-            toast.current && toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
         }
 
-        const confirm = (id: number) => {
+        const confirm = () => {
             confirmDialog({
                 message: `Do you want to delete comment with ID ${rowData.id}?`,
                 header: 'Delete Confirmation',
@@ -175,19 +189,15 @@ export default function TableComments({ data }: {
                 defaultFocus: 'reject',
                 acceptClassName: 'p-button-danger',
                 accept,
-                reject
             });
         };
 
         return (
             <>
-                <Toast ref={toast} position="top-right" />
-                <Button type="button" onClick={() => {
-                    confirm(rowData.id);
-                }} severity="danger" icon="pi pi-trash" rounded></Button>
+                <Button type="button" onClick={confirm} severity="danger" icon="pi pi-trash" rounded></Button>
             </>
         );
-    };
+    }, [dataComment]);
 
     return (
         <div className="card">
@@ -204,7 +214,6 @@ export default function TableComments({ data }: {
                 totalRecords={totalRecords}
                 scrollable scrollHeight="400px"
                 onPage={onPage}
-                // onFilter={onFilter}
                 header={renderHeader}
                 paginator
                 rowsPerPageOptions={[5, 10]}

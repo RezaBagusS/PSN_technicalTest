@@ -1,11 +1,11 @@
 import '@/styles/globals.css';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
 import 'primeicons/primeicons.css';
-import { ToastProvider } from '@/contexts/ToastContext';
 import { UserProvider } from '@/contexts/UserContext';
 import { Poppins } from 'next/font/google';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { LoadingDialogProvider } from '@/contexts/LoadingContext';
 
 const poppins = Poppins({
     variable: '--font-poppins',
@@ -23,9 +23,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             </Head>
             <div className={`${poppins.variable} cust-outer-container bg-custBackground text-custBlack flex overflow-y-auto overflow-x-hidden drop-shadow-md`}>
                 <UserProvider>
-                    <ToastProvider>
+                    <LoadingDialogProvider>
                         <Component {...pageProps} />
-                    </ToastProvider>
+                    </LoadingDialogProvider>
                 </UserProvider>
             </div>
         </>
