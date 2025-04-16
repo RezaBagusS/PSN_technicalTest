@@ -3,6 +3,8 @@ import { lazy, Suspense, useContext, useEffect } from "react";
 import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
+import { usePathname } from "next/navigation";
+import BreadCrumbManagement from "../ui/BreadcumbManagement";
 
 const LazySideBar = lazy(() => import('@/components/layout/SideBar'));
 const LazyHeaderDashboard = lazy(() => import('@/components/layout/HeaderDashboard'));
@@ -10,9 +12,13 @@ const LazyHeaderDashboard = lazy(() => import('@/components/layout/HeaderDashboa
 export default function DashboardLayout({ children }: { children: ReactNode }) {
     const { showToast } = useToast();
     const router = useRouter();
+    const pathname = usePathname();
     const { getUser } = useContext(UserContext);
 
+    const lastPath = pathname.split('/').pop()?.split('-').join(' ');
+
     useEffect(() => {
+
         if (!getUser()) {
             showToast({
                 severity: 'error',
@@ -30,7 +36,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 <div className="grid col-span-2 overflow-hidden">
                     <LazySideBar />
                 </div>
-                <div className="grid col-span-10 mt-20 pb-5 ps-8 pe-4 overflow-y-auto mr-5">
+                <div className="col-span-10 mt-20 pb-5 ps-8 pe-4 overflow-y-auto mr-5 space-y-4">
+                    <h2 className="font-semibold text-custPurple text-2xl capitalize">{lastPath}</h2>
+                    <BreadCrumbManagement />
                     <Suspense fallback={<div>Loading...</div>}>
                         {children}
                     </Suspense>

@@ -7,6 +7,7 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog';
+import { useRouter } from 'next/navigation';
 
 export default function TableComments({ data }: {
     data: IComments[];
@@ -30,6 +31,8 @@ export default function TableComments({ data }: {
             global: { value: '', matchMode: FilterMatchMode.CONTAINS },
         },
     });
+
+    const location = useRouter();
 
     useEffect(() => {
         let isMounted = true;
@@ -120,13 +123,16 @@ export default function TableComments({ data }: {
 
     const renderHeader = () => {
         return (
-            <div className="flex justify-end items-center gap-3">
-                <p className='text-sm opacity-70'>Search Found: {globalFilterValue ? totalRecords : 0}</p>
+            <div className="flex justify-between items-center gap-3">
                 <InputText
                     value={globalFilterValue}
                     onChange={onGlobalFilterChange}
-                    placeholder="Search all fields"
+                    placeholder="Search by id, name and email"
                     className="p-inputtext-sm"
+                />
+                <p className='text-sm opacity-70'>Search Found: {globalFilterValue ? totalRecords : 0}</p>
+                <Button label="Create Comment"  icon="pi pi-plus" severity="success" size='small' 
+                    onClick={() =>  location.push('/dashboard/create-comment')}
                 />
             </div>
         );

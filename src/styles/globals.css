@@ -40,7 +40,6 @@ ul {
   padding-left: 20px;
 }
 
-ol {
-  list-style-type: decimal;
-  padding-left: 20px;
+.custom-breadcrumb ol {
+  list-style-type: none !important;
 }
