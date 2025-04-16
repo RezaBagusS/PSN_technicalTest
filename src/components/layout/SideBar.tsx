@@ -53,6 +53,7 @@ const SideBar = () => {
                     label={'Logout'}
                     aria-label="Submit"
                     size="small"
+                    severity="secondary"
                     disabled={loading}
                     loading={loading}
                     onClick={handleLogout}

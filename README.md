@@ -23,19 +23,13 @@ This is a Next.js application for a comment management system with user authenti
 
 ## Tech Stack
 
-- **Framework**: Next.js 15.3.0 (App Router)
+- **Framework**: Next.js 15.3.0 (Pages Router)
 - **Frontend**: React, TypeScript
-- **UI Components**: PrimeReact (Button, InputText, DataTable, Toast, etc.)
+- **UI Components**: PrimeReact (Button, InputText, DataTable, Dialog, etc.)
 - **Form Handling**: react-hook-form
 - **Styling**: Tailwind CSS (optional, or PrimeReact styles)
 - **API**: JSONPlaceholder (for comment data, https://jsonplaceholder.typicode.com/comments)
-- **State Management**: React Context (for global toast notifications)
-
-## Prerequisites
-
-- Node.js (v18 or higher)
-- npm or yarn
-- A modern browser (Chrome, Firefox, etc.)
+- **State Management**: React Context (for global user and loading dialog)
 
 ## License
 
@@ -43,4 +37,4 @@ MIT License. See `LICENSE` for details.
 
 ## Contact
 
-For questions or feedback, reach out to [rezabagussaputrait@gmail.com] or open an issue on GitHub.
+For questions or feedback, reach out to [https://github.com/RezaBagusS] or open an issue on GitHub.

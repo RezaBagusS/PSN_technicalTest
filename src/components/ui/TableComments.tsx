@@ -164,13 +164,13 @@ export default function TableComments({ data, msgs }: {
                     closable: false
                 })
                 
-            } catch (error: any) {
+            } catch (error) {
                 
                 msgs.current?.show({
                     severity: 'error',
                     sticky: true,
                     summary: 'Delete Failed',
-                    detail: error.message,
+                    detail: error as React.ReactNode,
                     closable: false
                 })
             } finally {
@@ -197,7 +197,7 @@ export default function TableComments({ data, msgs }: {
                 <Button type="button" onClick={confirm} severity="danger" icon="pi pi-trash" rounded></Button>
             </>
         );
-    }, [dataComment]);
+    }, [dataComment, hideLoadingDialog, msgs, showLoadingDialog]);
 
     return (
         <div className="card">
