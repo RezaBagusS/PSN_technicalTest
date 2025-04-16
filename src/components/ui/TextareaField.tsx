@@ -1,7 +1,7 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { InputTextarea } from "primereact/inputtextarea";
-import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import { FieldValues, UseFormRegister } from "react-hook-form";
 
 interface InputFieldProps {
     label: string;

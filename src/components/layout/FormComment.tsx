@@ -6,7 +6,6 @@ import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 import { useRouter } from "next/navigation";
 import { useLoadingDialog } from "@/contexts/LoadingContext";
 import { Messages } from "primereact/messages";
-import { InputTextarea } from "primereact/inputtextarea";
 import TextareaField from "../ui/TextareaField";
 
 const FormComment = ({ msgs }: {

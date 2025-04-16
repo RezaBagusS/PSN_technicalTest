@@ -53,6 +53,8 @@ const FormLogin = () => {
             await new Promise((resolve) => setTimeout(resolve, 3000));
             location.push('/dashboard');
         } catch (error: unknown) {
+            console.log(error);
+            
             msgs.current?.show({
                 severity: 'error',
                 sticky: true,
@@ -60,7 +62,7 @@ const FormLogin = () => {
                 closable: false,
                 content: (
                     <>
-                        <p className="ml-2">{error as React.ReactNode}</p>
+                        <p className="ml-2">Invalid Credentials</p>
                     </>
                 )
             })
