@@ -46,7 +46,7 @@ export default function DashboardPage({ status, data }: {
                 severity: 'info',
                 sticky: true,
                 summary: 'Info',
-                detail: 'Data comment fetched successfully',
+                detail: 'Fetched successfully',
                 closable: false
             })
         }
@@ -58,7 +58,7 @@ export default function DashboardPage({ status, data }: {
 
     return (
         <DashboardLayout>
-            <Messages ref={msgs} />
+            <Messages ref={msgs} className='text-xs'/>
             <div className='space-y-4'>
                 <TableComments data={status ? data : []} msgs={msgs} />
             </div>

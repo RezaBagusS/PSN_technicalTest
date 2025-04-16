@@ -22,11 +22,11 @@ export default function BreadCrumbManagement() {
         return {
             label: formatLabel(segment),
             template: () => index + 1 === arrPath.length ? (
-                <p className="text-custDark font-semibold">
+                <Link href={url} className="text-custDark font-semibold text-xs md:text-sm pointer-events-none">
                     {formatLabel(segment)}
-                </p>
+                </Link>
             ) : (
-                <Link href={url} className="text-custBlack/70 hover:text-custBlack font-semibold">
+                <Link href={url} className="text-custBlack/70 text-xs md:text-sm translate-x-7 hover:text-custBlack font-semibold">
                     {formatLabel(segment)}
                 </Link>
             )

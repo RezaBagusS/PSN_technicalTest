@@ -34,7 +34,7 @@ const SideBar = () => {
     }
 
     return (
-        <aside className="bg-custWhite pt-20 pb-5 ps-8 pe-5 shadow-lg flex flex-col justify-between h-full">
+        <aside className="bg-[#ffffff] md:bg-custWhite pt-20 pb-5 ps-8 pe-5 md:shadow-lg flex flex-col justify-between h-full">
             <div className="flex flex-col gap-3">
                 {dataModule.map((item, index) => {
                     return (

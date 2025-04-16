@@ -1,6 +1,5 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import InputField from "../ui/InputFiled";
-import ErrorInput from "../ui/ErrorInput";
 import { Button } from 'primereact/button';
 import { useContext, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -23,6 +22,7 @@ const FormLogin = () => {
     const {
         handleSubmit,
         register,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<FieldValues>();
 
@@ -50,8 +50,10 @@ const FormLogin = () => {
                 throw new Error("Invalid username or password");
             }
 
-            await new Promise((resolve) => setTimeout(resolve, 3000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             location.push('/dashboard');
+
+            reset();
         } catch (error: unknown) {
             console.log(error);
             
@@ -68,10 +70,10 @@ const FormLogin = () => {
             })
         } finally {
             setTimeout(() => {
-                msgs.current?.clear()
+                msgs.current?.clear();
+                setLoading(false);
+                setSuccessLogin(false);
             }, 3000)
-            setLoading(false);
-            setSuccessLogin(false);
         }
     }
 
@@ -86,19 +88,17 @@ const FormLogin = () => {
                 <InputField
                     label="Username"
                     type="text"
+                    placeholder="Your username"
                     register={register}
+                    errors={errors}
                 />
-                {errors.username && (
-                    <ErrorInput message={errors.username} />
-                )}
                 <InputField
                     label="Password"
                     type="password"
+                    placeholder="Your Password"
                     register={register}
+                    errors={errors}
                 />
-                {errors.password && (
-                    <ErrorInput message={errors.password} />
-                )}
 
                 <div className="mt-3 flex justify-end w-full">
                     <Button

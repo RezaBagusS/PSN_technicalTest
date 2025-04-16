@@ -129,14 +129,14 @@ export default function TableComments({ data, msgs }: {
 
     const renderHeader = () => {
         return (
-            <div className="flex justify-between items-center gap-3">
+            <div className="grid md:flex md:justify-between md:items-center gap-3">
                 <InputText
                     value={globalFilterValue}
                     onChange={onGlobalFilterChange}
                     placeholder="Search by id, name and email"
                     className="p-inputtext-sm"
                 />
-                <p className='text-sm opacity-70'>Search Found: {globalFilterValue ? totalRecords : 0}</p>
+                <p className='text-sm opacity-70'>Search Found: {totalRecords}</p>
                 <Button label="Create Comment" icon="pi pi-plus" severity="success" size='small'
                     onClick={() => location.push('/dashboard/create-comment')}
                 />
@@ -159,18 +159,18 @@ export default function TableComments({ data, msgs }: {
                 msgs.current?.show({
                     severity: 'info',
                     sticky: true,
-                    summary: 'Delete Success',
                     detail: 'You have successfully deleted the comment',
                     closable: false
                 })
                 
             } catch (error) {
+                console.log(error);
                 
                 msgs.current?.show({
                     severity: 'error',
                     sticky: true,
                     summary: 'Delete Failed',
-                    detail: error as React.ReactNode,
+                    detail: 'Failed to delete the comment',
                     closable: false
                 })
             } finally {
